@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <ul>
+            <li>
+                <span>没有防抖的input <input id="unDebounce" type="text"></span>
+            </li>
+            <li>
+                <span>防抖后的input <input id="debounce" type="text"></span>
+            </li>
+            <li>
+                <span>节流后的input <input id="debounce" type="text"></span>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <ul>
+            <li>
+                <input type=text id=aaa>
+                <input type=button value=stop id=bb onclick=bb()>
+            </li>
+        </ul>
+    </div>
+    <script>
+        // 没有防抖的input
+        function baby(content) {
+            console.log("海绵宝宝说:" + content);
+        }
+        let inputa = document.getElementById('unDebounce')
+        inputa.addEventListener("keyup", function (e) {
+            baby(e.target.value)
+        })
+
+        // 防抖后的input
+        function ajax(content) {
+            console.log("派大星说:" + content);
+        }
+        function debounce(fun, delay) {
+            return function (args) {
+                let that = this
+                let _args = args
+                clearTimeout(fun.id)
+                fun.id = setTimeout(function () {
+                    fun.call(that, _args)
+                }, delay)
+            }
+        }
+        let inputb = document.getElementById('debounce')
+        let debounceAjax = debounce(ajax, 500)
+        inputb, addEventListener('keyup', function (e) {
+            debounceAjax(e.target.value)
+        })
+        // 
+        // let biu = function () {
+        //     console.log('biu biu biu', new Date())
+        // }
+        // let boom = function () {
+        //     console.log('boom boom boom', new Date())
+        // }
+        // setInterval(debounce(biu, 500), 1000)
+        // setInterval(debounce(boom, 2000), 1000)
+
+
+        // 节流后的input
+        // function throttle(fun, delay) {
+        //     let last, deferTimer;
+        //     return function (args) {
+        //         let that = this;
+        //         let _args = arguments;
+        //         let now = +new Date()
+        //         if (last && now < last + delay) {
+        //             clearTimeout = setTimeout(function () {
+        //                 last = now
+        //                 fun.apply(that, _args)
+        //             }, delay)
+        //         } else {
+        //             last = now
+        //             fun.apply(that, _args)
+        //         }
+        //     }
+        // }
+        // let throttleAjax = throttle(ajax, 1000)
+        // let inputc = document.getElementById('throttle')
+        // inputc = addEventListener('keyup', function (e) {
+        //     throttleAjax(e.target.value)
+        // })
+
+        function throttle(fun, delay) {
+            let last, deferTimer
+            return function (args) {
+                let that = this
+                let _args = arguments
+                let now = +new Date()
+                if (last && now < last + delay) {
+                    clearTimeout(deferTimer)
+                    deferTimer = setTimeout(function () {
+                        last = now
+                        fun.apply(that, _args)
+                    }, delay)
+                } else {
+                    last = now
+                    fun.apply(that, _args)
+                }
+            }
+        }
+        let throttleAjax = throttle(ajax, 1000)
+        let inputc = document.getElementById('throttle')
+        inputc.addEventListener('keyup', function (e) {
+            throttleAjax(e.target.value)
+        })
+
+
+
+        // setTimeout() and clearTimeout()
+        // let  iTime
+        // function aa() {
+        //     aaa.value += "！";
+        //     iTime = setTimeout("aa()", 600);
+        // }
+        // function bb() {
+        //     if (iTime != "")
+        //         clearTimeout(iTime);
+        // }
+        // aa()
+    </script>
+</body>
+
+</html>
